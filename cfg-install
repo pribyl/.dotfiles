@@ -1,3 +1,5 @@
+#TODO
+#check if git is installed or install git via appropriate package manager (Vagrant?)
 git clone --bare https://github.com/pribyl/.dotfiles.git $HOME/.cfg
 function cfg {
    git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
