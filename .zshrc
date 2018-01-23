@@ -101,7 +101,8 @@ alias gd='git diff '
 #export CLION=/home/tpribyl/sw/clion-171.3224.8/bin/clion.sh
 #export CLION=/home/tpribyl/sw/clion-2017.1/bin/clion.sh
 #export CLION=/home/tpribyl/sw/clion-172.3095.8/bin/clion.sh
-export CLION=$HOME/sw/clion-2017.2/bin/clion.sh
+#export CLION=$HOME/sw/clion-2017.2/bin/clion.sh
+export CLION=$HOME/sw/clion-2017.3/bin/clion.sh
 # run_clion_here
 alias ccc='$CLION CMakeCache.txt > /dev/null 2>&1 & disown %1'
 alias agg='ag -S --hidden -G ".*"'
@@ -171,7 +172,7 @@ function dkr2 {
   
   echo -n "Params: "; read params
 
-  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev -w $PWD -u root $image $params"
+  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/p/local:/p/local -w $PWD -u root $image $params"
   echo "cmd: $cmd"
   
   `echo $cmd`
@@ -269,10 +270,10 @@ function dkr {
   
   echo -n "params: "; read params
 
-  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev -w $PWD -u root $image $params"
+  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group -w $PWD -u root $image $params"
   echo "cmd: $cmd"
   
   `echo $cmd`
 }
 
-export PATH="$HOME/.linuxbrew/bin:$PATH"
+export PATH="$HOME/.linuxbrew/bin:/home/tpribyl/sw/cmake-3.10.1-Linux-x86_64/bin:$PATH"
