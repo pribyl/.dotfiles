@@ -112,8 +112,16 @@ alias agg='ag -S --hidden -G ".*"'
 
 export PATH=$HOME/sw:$PATH
 
-if [ -f "$HOME/.bash_ps1" ]; then
-  . "$HOME/.bash_ps1"
+if [[ ! -a /.dockerenv ]]; then
+  source $HOME/sw/zsh-directory-history/directory-history.plugin.zsh
+
+  # Bind up/down arrow keys to navigate through your history
+  bindkey '\e[A' directory-history-search-backward
+  bindkey '\e[B' directory-history-search-forward
+
+  # Bind CTRL+k and CTRL+j to substring search
+  bindkey '^j' history-substring-search-up
+  bindkey '^k' history-substring-search-down
 fi
 
 function mkcd {
@@ -277,3 +285,4 @@ function dkr {
 }
 
 export PATH="$HOME/.linuxbrew/bin:/home/tpribyl/sw/cmake-3.10.1-Linux-x86_64/bin:$PATH"
+
