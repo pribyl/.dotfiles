@@ -146,103 +146,105 @@ function cmk {
 #source $HOME/.linuxbrew/share/antigen/antigen.zsh
 #antigen bundle soimort/translate-shell
 
-function dkr {
-  imagesAll=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1}'`)
+if [[ ! -a /.dockerenv ]]; then
+  function dkr {
+    imagesAll=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1}'`)
 
-  selected=1
-  regexp=''
-  modif=0
-  images=''
+    selected=1
+    regexp=''
+    modif=0
+    images=''
 
-  while [ 1 ]; do
-    tput ed
-    tput el1
-    echo
+    while [ 1 ]; do
+      tput ed
+      tput el1
+      echo
 
-    if [ ! -z "$regexp" ];
-    then
-      rgxp=`echo "$regexp" | sed -r 's/(.)/\1.*/g'`
-      images=(`printf '%s\n' "${imagesAll[@]}" | ag $rgxp`)
-    else
-      images=(`echo $imagesAll`)
-    fi
-
-    if [ "$selected" -le "1" ]
-    then
-      selected=1
-    fi
-    if [ "$selected" -ge "${#images}" ]
-    then
-      selected=${#images}
-    fi
-
-    for i in $(seq ${#images}); do
-      sel=' '
-      if [ "$i" -eq "$selected" ];
+      if [ ! -z "$regexp" ];
       then
-        sel='>'
-        tput rev
+        rgxp=`echo "$regexp" | sed -r 's/(.)/\1.*/g'`
+        images=(`printf '%s\n' "${imagesAll[@]}" | ag $rgxp`)
+      else
+        images=(`echo $imagesAll`)
       fi
-      echo "$sel${images[$i]}"
-      tput sgr0
-    done
-    for i in {1..$((${#images}+1))};do tput cuu1; done
-    echo -n $regexp
 
-    read -sk 1 key
-    code=`printf "%d\n" "'$key"`
-    if [ "$code" -eq "27" ];
-    then
+      if [ "$selected" -le "1" ]
+      then
+        selected=1
+      fi
+      if [ "$selected" -ge "${#images}" ]
+      then
+        selected=${#images}
+      fi
+
+      for i in $(seq ${#images}); do
+        sel=' '
+        if [ "$i" -eq "$selected" ];
+        then
+          sel='>'
+          tput rev
+        fi
+        echo "$sel${images[$i]}"
+        tput sgr0
+      done
+      for i in {1..$((${#images}+1))};do tput cuu1; done
+      echo -n $regexp
+
       read -sk 1 key
       code=`printf "%d\n" "'$key"`
+      if [ "$code" -eq "27" ];
+      then
+        read -sk 1 key
+        code=`printf "%d\n" "'$key"`
+        case "$code" in
+          91)
+            read -sk 1 key
+            code=$((256+`printf "%d\n" "'$key"`))
+            ;;
+          27)
+            return 0
+            ;;
+        esac
+      fi
+
       case "$code" in
-        91)
-          read -sk 1 key
-          code=$((256+`printf "%d\n" "'$key"`))
+        10)
+          if [ ! -z "$images" ];
+          then
+            image=${images[$(($selected))]}
+            break
+          fi
           ;;
-        27)
-          return 0
+        127)
+          regexp="${regexp%?}"
+          ;;
+        321)
+          selected=$(($selected-1))
+          ;;
+        322)
+          selected=$(($selected+1))
+          ;;
+        *)
+          regexp="$regexp$key"
           ;;
       esac
-    fi
+    done
 
-    case "$code" in
-      10)
-        if [ ! -z "$images" ];
-        then
-          image=${images[$(($selected))]}
-          break
-        fi
-        ;;
-      127)
-        regexp="${regexp%?}"
-        ;;
-      321)
-        selected=$(($selected-1))
-        ;;
-      322)
-        selected=$(($selected+1))
-        ;;
-      *)
-        regexp="$regexp$key"
-        ;;
-    esac
-  done
+    tput ed
+    echo
 
-  tput ed
-  echo
+    echo "image: $image"
+    name=`echo "$USER-$image" | sed -r 's/[\/]+/_/g'`
+    echo "name: $name"
+    
+    echo -n "params: "; read params
 
-  echo "image: $image"
-  name=`echo "$USER-$image" | sed -r 's/[\/]+/_/g'`
-  echo "name: $name"
-  
-  echo -n "params: "; read params
-
-  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group -w $PWD -u root $image $params"
-  echo "cmd: $cmd"
-  
-  `echo $cmd`
-}
+    cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group -w $PWD -u root $image $params"
+    echo "cmd: $cmd"
+    
+    `echo $cmd`
+  }
+fi
 
 export PATH="$HOME/.linuxbrew/bin:/home/tpribyl/sw/cmake-3.10.1-Linux-x86_64/bin:$PATH"
 
