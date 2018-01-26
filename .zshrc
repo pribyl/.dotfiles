@@ -146,46 +146,6 @@ function cmk {
 #source $HOME/.linuxbrew/share/antigen/antigen.zsh
 #antigen bundle soimort/translate-shell
 
-# Docker VMs
-function dkr2 {
-  images=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1}'`)
-
-  if [ ! -z "$1" ];
-  then
-    images=(`printf '%s\n' "${images[@]}" | ag $1`)
-  fi
-
-  if [ "${#images}" -eq 0 ];
-  then
-    echo "Image not found..."
-    return -1
-  elif [ "${#images}" -eq 1 ];
-  then
-    image=${images[1]}
-    echo "Single image found..."
-  else
-
-    select option in $images; do
-      if [ 1 -le "$REPLY" ] && [ "$REPLY" -le ${#images} ];
-      then
-        image=$option
-        break;
-      fi
-    done
-  fi
-
-  echo "image: $image"
-  name=`echo "$USER-$image" | sed -r 's/[\/]+/_/g'`
-  echo "name: $name"
-  
-  echo -n "Params: "; read params
-
-  cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/p/local:/p/local -w $PWD -u root $image $params"
-  echo "cmd: $cmd"
-  
-  `echo $cmd`
-}
-
 function dkr {
   imagesAll=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1}'`)
 
