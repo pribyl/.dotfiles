@@ -14,3 +14,4 @@ if [ $? = 0 ]; then
 fi;
 cfg checkout work
 cfg config status.showUntrackedFiles no
+#TODO: create symlink to my theme if oh-my-zsh is installed (if not, install it)
