@@ -54,7 +54,7 @@ ZSH_THEME="tpr"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git wd)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,27 +102,16 @@ alias gd='git diff '
 #export CLION=/home/tpribyl/sw/clion-2017.1/bin/clion.sh
 #export CLION=/home/tpribyl/sw/clion-172.3095.8/bin/clion.sh
 #export CLION=$HOME/sw/clion-2017.2/bin/clion.sh
-export CLION=$HOME/sw/clion-2017.3/bin/clion.sh
+#export CLION=$HOME/sw/clion-2018.1.5/bin/clion.sh
+export CLION=$HOME/sw/clion-2018.3/bin/clion.sh
 # run_clion_here
 alias ccc='$CLION CMakeCache.txt > /dev/null 2>&1 & disown %1'
-alias agg='ag -S --hidden -G ".*"'
+alias agg='ag -U -S --hidden -G ".*"'
 # added by Miniconda2 4.1.11 installer
 #export PATH="/home/tpribyl/sw/miniconda2/bin:$PATH"
 #source activate master
 
 export PATH=$HOME/sw:$PATH
-
-if [[ ! -a /.dockerenv ]]; then
-  source $HOME/sw/zsh-directory-history/directory-history.plugin.zsh
-
-  # Bind up/down arrow keys to navigate through your history
-  bindkey '\e[A' directory-history-search-backward
-  bindkey '\e[B' directory-history-search-forward
-
-  # Bind CTRL+k and CTRL+j to substring search
-  bindkey '^j' history-substring-search-up
-  bindkey '^k' history-substring-search-down
-fi
 
 function mkcd {
   mkdir -p $1
@@ -239,12 +228,18 @@ if [[ ! -a /.dockerenv ]]; then
     
     echo -n "params: "; read params
 
-    cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group -w $PWD -u root $image $params"
+    cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group --volume=/p:/p -w $PWD -u root $image $params"
+    #cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group --volume=/p:/p -w $PWD -u tpribyl $image $params"
     echo "cmd: $cmd"
     
     `echo $cmd`
   }
 fi
 
-export PATH="$HOME/.linuxbrew/bin:/home/tpribyl/sw/cmake-3.10.1-Linux-x86_64/bin:$PATH"
+alias winmerge='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/WinMerge/WinMergeU.exe'
 
+alias fh='find . -iname'
+
+alias xtest='ctest --output-on-failure -R'
+
+export PATH="$HOME/.linuxbrew/bin:/opt/cmake-3.13.3/bin:/home/tpribyl/miniconda2/bin:/p/cling/inst/bin:$PATH"
