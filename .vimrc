@@ -20,7 +20,6 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'Shougo/vimproc.vim', { 'build' : { 'linux' : 'make' } }
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'taglist.vim'
 NeoBundle 'lunaru/vim-twig'
@@ -273,3 +272,7 @@ noremap <silent> <Leader>1 :<C-u>let @z=&so<CR>:set so=0 noscb<CR>:bo vs<CR>Ljzt
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+cnoreabbrev qw wq
+
+:nmap <CR><CR> o<ESC>
