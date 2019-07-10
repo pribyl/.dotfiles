@@ -242,4 +242,8 @@ alias fh='find . -iname'
 
 alias xtest='ctest --output-on-failure -R'
 
+alias kdevelop='/home/tpribyl/sw/kdevelop/KDevelop.AppImage'
+
+alias l='ls -lah --color --group-directories-first'
+
 export PATH="$HOME/.linuxbrew/bin:/opt/cmake-3.13.3/bin:/home/tpribyl/miniconda2/bin:/p/cling/inst/bin:$PATH"
