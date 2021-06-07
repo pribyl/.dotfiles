@@ -7,9 +7,6 @@ curl -L https://nixos.org/nix/install | sh
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 nix-env -iA nixpkgs.nix-tree nixpkgs.git
 
-touch ~/.zshrc
-zsh
-
 git clone --bare https://github.com/pribyl/.dotfiles.git $HOME/.cfg
 alias cfg='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 mkdir -p .config-backup
