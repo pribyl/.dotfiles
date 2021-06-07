@@ -254,9 +254,9 @@ function mdd {
   pandoc $1 | lynx -stdin
 }
 
-export PATH="$HOME/sw:/opt/cmake-3.13.3/bin:/p/cling/inst/bin:$HOME/.cargo/bin:/home/tpribyl/sw/wtf_0.20.0_linux_amd64:/home/tpribyl/sw:$PATH"
+export PATH="$HOME/sw:/opt/cmake-3.13.3/bin:/p/cling/inst/bin:$HOME/.cargo/bin:$HOME/sw/wtf_0.20.0_linux_amd64:$HOME/sw:$PATH"
 
 export PYTHONPATH="/p/image_flat_dev/ml_framework/python:/p/image_flat_dev/iface/connectors/python:/p/image_flat_dev/libs/img_tran/connectors/python:/p/image_flat_dev/ext_libs/caffe/python"
 
 export INTEL_ROOT=/opt/intel/compilers_and_libraries_2018.5.274/linux/
-if [ -e /home/tpribyl/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tpribyl/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
