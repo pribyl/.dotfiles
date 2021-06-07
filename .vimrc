@@ -184,7 +184,7 @@ let g:alternateSearchPath = 'sfr:../source,sfr:../src,sfr:../include,sfr:../inc,
 set foldmethod=marker
 
 " building ctags
-map <F11> :!ctags -R --c++-kinds=+p --fields=+iaS --exclude=dep --extra=+q .<CR>
+map <F9> :!ctags -R --c++-kinds=+p --fields=+iaS --exclude=dep --extra=+q .<CR>
 set tags=tags,../tags
 
 " hilight current line in edit mode
@@ -263,10 +263,15 @@ endfunction
 
 noremap <silent> <Leader>1 :<C-u>let @z=&so<CR>:set so=0 noscb<CR>:bo vs<CR>Ljzt:setl scb<CR><C-w>p:setl scb<CR>:let &so=@z<CR>
 
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
+  if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+  endif
 
 cnoreabbrev qw wq
 
 :nmap <CR><CR> o<ESC>
+
+nnoremap <TAB> >>
+nnoremap <S-TAB> <<
+vnoremap <TAB> >gv
+vnoremap <S-TAB> <gv

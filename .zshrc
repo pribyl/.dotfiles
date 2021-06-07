@@ -92,26 +92,19 @@ function cfg {
 }
 
 
-alias proj='cd ~/projects'
-alias st='tig status -uno'
+alias st='tig status'
 alias psg='ps -eo pid,ppid,uname,rss,vsize,pcpu,args,cmd,etime | grep $USER | grep'
+alias dff='df -h -x squashfs -x tmpfs -x devtmpfs'
 
 alias gd='git diff '
+#alias docker='podman'
 
-#export CLION=/home/tpribyl/sw/clion-171.3224.8/bin/clion.sh
-#export CLION=/home/tpribyl/sw/clion-2017.1/bin/clion.sh
-#export CLION=/home/tpribyl/sw/clion-172.3095.8/bin/clion.sh
-#export CLION=$HOME/sw/clion-2017.2/bin/clion.sh
-#export CLION=$HOME/sw/clion-2018.1.5/bin/clion.sh
-export CLION=$HOME/sw/clion-2018.3/bin/clion.sh
-# run_clion_here
+export CLION=$HOME/sw/clion/bin/clion.sh
 alias ccc='$CLION CMakeCache.txt > /dev/null 2>&1 & disown %1'
-alias agg='ag -U -S --hidden -G ".*"'
-# added by Miniconda2 4.1.11 installer
-#export PATH="/home/tpribyl/sw/miniconda2/bin:$PATH"
-#source activate master
 
-export PATH=$HOME/sw:$PATH
+alias agg='ag -U -S --hidden -G ".*"'
+
+alias clion=$CLION
 
 function mkcd {
   mkdir -p $1
@@ -121,7 +114,9 @@ function mkcd {
 alias -g prj=~/projects
 alias git-sub='git submodule update --init --recursive'
 
-#alias diff='clion diff'
+alias cdiff='clion diff'
+alias bdiff='bcompare'
+
 function cmk {
   rm out.txt 2>/dev/null
   cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release $@ 2>&1 | tee -a out.txt
@@ -132,12 +127,15 @@ function cmk {
   fi
 }
 
+alias cmifd='cmake -C ../cmake/config/linux64-gcc.cmake -C ../cmake/config/devel_linux.cmake -DCMAKE_BUILD_TYPE=Debug ..'
+alias cmifr='cmake -C ../cmake/config/linux64-gcc.cmake -C ../cmake/config/devel_linux.cmake -DCMAKE_BUILD_TYPE=Release ..'
+
 #source $HOME/.linuxbrew/share/antigen/antigen.zsh
 #antigen bundle soimort/translate-shell
 
 if [[ ! -a /.dockerenv ]]; then
   function dkr {
-    imagesAll=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1}'`)
+    imagesAll=(`docker images -a | ag -v none | tail -n +2 | awk '{print $1 ":" $2}'`)
 
     selected=1
     regexp=''
@@ -223,12 +221,12 @@ if [[ ! -a /.dockerenv ]]; then
     echo
 
     echo "image: $image"
-    name=`echo "$USER-$image" | sed -r 's/[\/]+/_/g'`
+    name=`echo "$USER-$image-$RANDOM" | sed -r 's/[\/:.]+/_/g' | sed -r 's/_ba_innovatrics_net//g'`
     echo "name: $name"
     
     echo -n "params: "; read params
 
-    cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group --volume=/p:/p -w $PWD -u root $image $params"
+    cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/home/tpribyl:/root --volume=/p:/p -w $PWD -u root $image $params"
     #cmd="docker run -ti --rm --name $name --hostname $name --volume=/home/tpribyl:/home/tpribyl --volume=/home/tpribyl:/home/dev --volume=/etc/passwd:/etc/passwd --volume=/etc/group:/etc/group --volume=/p:/p -w $PWD -u tpribyl $image $params"
     echo "cmd: $cmd"
     
@@ -236,14 +234,29 @@ if [[ ! -a /.dockerenv ]]; then
   }
 fi
 
-alias winmerge='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/WinMerge/WinMergeU.exe'
-
 alias fh='find . -iname'
 
 alias xtest='ctest --output-on-failure -R'
 
-alias kdevelop='/home/tpribyl/sw/kdevelop/KDevelop.AppImage'
-
 alias l='ls -lah --color --group-directories-first'
 
-export PATH="$HOME/.linuxbrew/bin:/opt/cmake-3.13.3/bin:/home/tpribyl/miniconda2/bin:/p/cling/inst/bin:$PATH"
+alias gsha='echo `git log --pretty=format:'%h' -n 1`'
+
+alias rsy='rsync -ah --info=progress2'
+
+alias pcloud='~/sw/pcloud > /dev/null 2>&1 & disown %1'
+
+function venv {
+  source /p/venv/$1/bin/activate
+}
+
+function mdd {
+  pandoc $1 | lynx -stdin
+}
+
+export PATH="$HOME/sw:/opt/cmake-3.13.3/bin:/p/cling/inst/bin:$HOME/.cargo/bin:/home/tpribyl/sw/wtf_0.20.0_linux_amd64:/home/tpribyl/sw:$PATH"
+
+export PYTHONPATH="/p/image_flat_dev/ml_framework/python:/p/image_flat_dev/iface/connectors/python:/p/image_flat_dev/libs/img_tran/connectors/python:/p/image_flat_dev/ext_libs/caffe/python"
+
+export INTEL_ROOT=/opt/intel/compilers_and_libraries_2018.5.274/linux/
+if [ -e /home/tpribyl/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tpribyl/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
