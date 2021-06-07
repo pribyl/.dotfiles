@@ -1,5 +1,11 @@
-#TODO
-#check if git is installed or install git via appropriate package manager (Vagrant?)
+# sudo apt update
+# sudo apt -y install curl xz-utils
+# sudo mkdir -m 0755 /nix && chown $USER:USER /nix
+
+curl -L https://nixos.org/nix/install | sh
+. $HOME/.nix-profile/etc/profile.d/nix.sh
+nix-env -iA nixpkgs.nix-tree nixpkgs.git
+
 git clone --bare https://github.com/pribyl/.dotfiles.git $HOME/.cfg
 function cfg {
    git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
