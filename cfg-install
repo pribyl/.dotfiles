@@ -1,6 +1,6 @@
 # sudo apt update
 # sudo apt -y install curl xz-utils
-# sudo mkdir -m 0755 /nix && chown $USER:USER /nix
+# sudo mkdir -m 0755 /nix && sudo chown $USER:$USER /nix
 
 cd $HOME
 curl -L https://nixos.org/nix/install | sh
