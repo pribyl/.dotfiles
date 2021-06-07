@@ -11,9 +11,7 @@ touch ~/.zshrc
 zsh
 
 git clone --bare https://github.com/pribyl/.dotfiles.git $HOME/.cfg
-function cfg {
-   git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
-}
+alias cfg='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 mkdir -p .config-backup
 cfg checkout work
 if [ $? = 0 ]; then
