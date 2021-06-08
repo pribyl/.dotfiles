@@ -23,4 +23,4 @@ cfg config status.showUntrackedFiles no
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ln -s $HOME/.cfg-files/tpr.zsh-theme .oh-my-zsh/themes/tpr.zsh-theme
 
-chsh -s `where zsh | head -n 1` $USER
+chsh -s `which zsh` $USER
