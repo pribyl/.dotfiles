@@ -2,6 +2,7 @@
 # sudo apt -y install curl xz-utils
 # sudo mkdir -m 0755 /nix && sudo chown $USER:$USER /nix
 
+export CFG_BRANCH=work
 cd $HOME
 curl -L https://nixos.org/nix/install | sh
 . $HOME/.nix-profile/etc/profile.d/nix.sh
@@ -10,14 +11,14 @@ nix-env -iA nixpkgs.nix-tree nixpkgs.git nixpkgs.zsh
 git clone --bare https://github.com/pribyl/.dotfiles.git $HOME/.cfg
 alias cfg='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 mkdir -p .config-backup
-cfg checkout work
+cfg checkout $CFG_BRANCH
 if [ $? = 0 ]; then
   echo "Checked out config.";
 else
   echo "Backing up pre-existing dot files.";
-  cfg checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+  cfg checkout $CFG_BRANCH 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
 fi;
-cfg checkout work
+cfg checkout $CFG_BRANCH
 cfg config status.showUntrackedFiles no
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
